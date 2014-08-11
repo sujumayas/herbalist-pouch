@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Herbalist Pouch</title>
+        <!-- Stylesheets -->
+        <link rel="stylesheet" href="css/herbs.css">
+        <!-- Vendor JS files -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <!-- Main JS files -->
+        <script src="js/herbs-js.js"></script>
+        <script src="js/herbalist.js"></script>
+</head>
+<body>
+        <div class="wrapper">
+          <h1>The Herbalist Pouch</h1>
+          <div class="instructions">
+            <h3>Valid Properties:</h3>
+            <ul>
+              <li>Name</li>
+              <li>Type</li>
+              <li>Area</li>
+              <li>Zone</li>
+              <li>Description</li>
+              <li>Level</li>
+              <li>Cost</li>
+            </ul>
+          </div>
+          <!-- The Form + Button -->
+          <form>
+            <label for="property">Property</label>
+            <input id="property" type="text" name="property" placeholder="Property">
+            <label for="value">Value</label>
+            <input id="value" type="text" name="value" placeholder="Value">
+          </form>
+          <button type="submit" val="Buscar" onclick="iterateJSON((getElementById('property').value),(getElementById('value').value));">Search</button>
+         
+          <!-- Search Results will display in here: -->
+          <div class="search-results" id="search-results"></div>
+
+        </div>
+
+</body>
+</html>

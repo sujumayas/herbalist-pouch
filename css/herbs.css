@@ -1,0 +1,53 @@
+
+
+.instructions {
+	font-size: 12px;
+}
+.search-results{
+	width: 95%;
+	margin: 0 auto;
+
+}
+.item{
+	background-color: #45b; 
+	display: block;
+	float:left; 
+	width:500px;
+	word-wrap: 0;
+	margin: 10px;
+	padding: 10px;
+	list-style-type: none;
+}
+
+.prop {
+	text-transform: capitalize;
+	display: inline-block;
+	width: 20%;
+	font-weight: 700;
+	vertical-align: top;
+}
+
+.val {
+	display: inline-block;
+	text-transform: capitalize;
+	width: 80%;
+}
+
+/* Dificultiesss */
+.ABSURD {}
+
+.VHARD {}
+
+.NORMAL {}
+
+.SHEERF {}
+
+.EHARD {}
+
+.FACIL {}
+
+.DIFICIL {}
+
+.VEASY {}
+
+.ROUTINE {}
