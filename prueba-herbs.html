@@ -17,24 +17,50 @@
           <h1>The Herbalist Pouch</h1>
           <div class="instructions">
             <h3>Valid Properties:</h3>
-            <ul>
-              <li>Name</li>
-              <li>Type</li>
-              <li>Area</li>
-              <li>Zone</li>
-              <li>Description</li>
-              <li>Level</li>
-              <li>Cost</li>
-            </ul>
+            <p>Coloca en los espacios correspondientes la Zona y el Area en el que estás. Luego, coloca tu skill en Foragin/Survival y el dado que te salió en la tirada.</p>
           </div>
           <!-- The Form + Button -->
           <form>
-            <label for="property">Property</label>
-            <input id="property" type="text" name="property" placeholder="Property">
-            <label for="value">Value</label>
-            <input id="value" type="text" name="value" placeholder="Value">
+            <label for="area">Area:</label>
+            <select name="area" id="area">
+              <option value="Eriador">Eriador</option>
+              <option value="Rohan">Rohan</option>
+              <option value="Gondor">Gondor</option>
+              <option value="Rhun">Rhun</option>
+              <option value="Rohvannion">Rohvannion</option>
+              <option value="Mordor">Mordor</option>
+              <option value="Anduin Vale">Anduin Vale</option>
+              <option value="Harad">Harad</option>
+              <option value="Khand">Khand</option>
+              <option value="Forochel">Forochel</option>
+            </select>
+            <label for="zone">Zone:</label>
+            <select name="zone" id="zone">
+              <option value="Hills">Hills</option>
+              <option value="Mountains">Mountains</option>
+              <option value="Seaside">Seaside</option>
+              <option value="River shores">River shores</option>
+              <option value="Lake shores">Lake shores</option>
+              <option value="Coniferous Forest">Coniferous Forest</option>
+              <option value="Deciduous Forest">Deciduous Forest</option>
+              <option value="Plains">Plains</option>
+              <option value="Gorge">Gorge</option>
+              <option value="Swamp">Swamp</option>
+              <option value="Rough">Rough</option>
+              <option value="Desert">Desert</option>
+              <option value="Volcanic">Volcanic</option>
+              <option value="Thundra">Thundra</option>
+              <option value="Underground">Underground</option>
+              <option value="Rain Forest">Rain Forest</option>
+            </select>
+            <label for="foragin-skill">Foragin Skill</label>
+            <input id="foragin-skill" type="number" name="foragin-skill" placeholder="Foragin Skill">
+            <label for="dice-result">Dice Result</label>
+            <input id="dice-result" type="number" name="dice-result" placeholder="Dice Result">
+            <label for="unitary-result">Unitary Result</label>
+            <input id="unitary-result" type="number" name="unitary-result" placeholder="Unitary Result">
           </form>
-          <button type="submit" val="Buscar" onclick="iterateJSON((getElementById('property').value),(getElementById('value').value));">Search</button>
+          <button type="submit" val="Buscar" onclick="herbalistHelper((getElementById('area').value), (getElementById('zone').value), (getElementById('foragin-skill').value),(getElementById('dice-result').value), (getElementById('unitary-result').value));">Search</button>
          
           <!-- Search Results will display in here: -->
           <div class="search-results" id="search-results"></div>
