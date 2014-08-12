@@ -6,15 +6,14 @@
 
 //Objeto Principal = App function. It sets the primary variables and wrapps the rest of the functions.
 var Herbalist = function Herbalist(propiedades){
-  // console.log(propiedades);
   for (var propiedad in propiedades) {
     this[propiedad] = propiedades[propiedad];
     console.log('Herbalist.'+propiedad+ ' : ' + this[propiedad]);
   }
   this.foragin = parseInt(this.foragin);
   this.dice = parseInt(this.dice);
-  this.unitary = parseInt(this.unitary);
-  
+  this.unitary = this.getPrimary(this.dice);
+  console.log(this.unitary);
   this.totalDice = this.foragin + this.dice;
 
 };
@@ -44,8 +43,8 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   //Now we show the user the available herbs of the Area/Zone filtered by his unitary luck
   /*
     Here we need to:
-    1) Show herbs filtered by Dificulty, with a quantity and price indicators
-    2) Let the user "buy" this herbs with his ACTUAL unitary as money
+    1) Show herbs filtered by Dificulty, with a quantity and price indicators (¿hiden?)
+    2) Let the user "buy" this herbs with his ACTUAL unitary as money.
     3) Let the user throw again the dice, to get a new Unitary, and keep buying the Zone Filtered herbs until he get all or stops searching.
   */
 
@@ -59,7 +58,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   };
 
   
-  //Function to Search the zone and print return items in the zone.
+  //Function to Search the zone and print return items in the zone
   Herbalist.prototype.searchTheArea = function(area){
     var areaProp = 'Area';
     var filteredHerbs = [];
@@ -74,7 +73,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   };
 
 
-  //Function to Search the zone and print return items in the zone.
+  //Function to Search the zone and print return items in the zone
   Herbalist.prototype.searchTheZone = function(zone, areaHerbs){
     var zoneProp = 'Zone';
     var filteredHerbs2 = [];
@@ -90,7 +89,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   
 
 
-  //Function that checks what difficulty you can have: 
+  //Function that checks what difficulty you can have
   Herbalist.prototype.whatYouCanFind = function(totalDice, zoneHerbs) {
     var maxLevel;
     switch(true) {
@@ -138,7 +137,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   }
 
 
-  //Function that takes the unitary number and I don't know.
+  //Function that takes the unitary number and I don't know
   Herbalist.prototype.unitaryMix = function(unitary, maxLevelHerbs){
     var totalNumberOfHerbsByLevel = {};
       if(maxLevelHerbs > 0){
@@ -183,7 +182,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
 
 
 
-  //Version anterior: 
+  //Version anterior
   Herbalist.prototype.absoluteSearch = function(property, value){
     $('#search-results').children().remove();
     if(indexOf.call(validProperties, property) > -1 ){
@@ -191,7 +190,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
         if(herbs[item].hasOwnProperty(property)){
           if (herbs[item][property] == value) {
             console.dir(herbs[item]);
-            iterateToPrintItem(herbs[item]);
+            iterateToPrintItem(herbs[item], item);
           }
         }
       }
@@ -200,7 +199,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
     }
   };
 
-  //Creando la funcion indexOf porque ya es muy tarde para pensar.
+  //Creando la funcion indexOf porque ya es muy tarde para pensar
   Herbalist.prototype.indexOf = function(needle) {
     if(typeof Array.prototype.indexOf === 'function') {
         indexOf = Array.prototype.indexOf;
@@ -219,8 +218,38 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
     return indexOf.call(this, needle);
   };
 
-
-
+  //Searching for the right way to do the primary number
+  Herbalist.prototype.getPrimary = function(number) {
+    var strigified = number.toString();
+    console.log(strigified);
+    var primary = 0;
+    if (strigified.length > 2) {
+        console.log('The number has more than 2 digits');
+        primary += (parseInt(strigified.charAt(0), 10) * 10);
+        primary += parseInt(strigified.charAt(1), 10)
+        if(strigified.charAt(-1) == 0){
+          console.log('...and -1 is 0:');
+          primary += 10;
+        }else{
+          console.log('...and -1 is not 0');
+          primary += parseInt(strigified.charAt(0), 10);
+      }
+    }else if(strigified.length > 1){
+      if(strigified.charAt(-1) == 0){
+        console.log('The number has more than 1 digit, and -1 is 0:');
+        primary += 10;
+        primary += parseInt(strigified.charAt(0), 10);
+      }else{
+        console.log('The number has more than 1 digit, and -1 is not 0');
+        primary += parseInt(strigified.charAt(0), 10);
+        primary += parseInt(strigified.charAt(1), 10);
+      }
+    }else{
+      console.log('The number has 1 digit');
+      primary += parseInt(strigified.charAt(0), 10);
+    }
+    return primary;
+  }
 
 
 
