@@ -62,7 +62,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   Herbalist.prototype.searchTheArea = function(area){
     var areaProp = 'Area';
     var filteredHerbs = [];
-    for (item in allHerbs) {
+    for (item in [allHerbs]) {
       if (allHerbs[item][areaProp] == area) {
           if(filteredHerbs.indexOf(allHerbs[item])){
             filteredHerbs.push(allHerbs[item]);
@@ -170,6 +170,8 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
     console.dir(totalNumberOfHerbsByLevel);
   };
 
+
+
   //function that iterates and prints every SINGLE item
   Herbalist.prototype.iterateToPrintItem = function(item, index){
     $('#search-results').append('<ul class="item" id="item-'+index+'"></ul>');
@@ -184,7 +186,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
 
   //Version anterior
   Herbalist.prototype.absoluteSearch = function(property, value){
-    $('#search-results').children().remove();
+    this.resetSearch();
     if(indexOf.call(validProperties, property) > -1 ){
       for (item in herbs) {
         if(herbs[item].hasOwnProperty(property)){
@@ -217,6 +219,13 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
     }
     return indexOf.call(this, needle);
   };
+
+
+  Herbalist.prototype.finalSearchToArray = function(herbsInTheZone, maxlevelHerbs) {
+
+    return yourHerbs;
+  }
+
 
   //Searching for the right way to do the primary number
   Herbalist.prototype.getPrimary = function(number) {
