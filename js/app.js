@@ -6,15 +6,17 @@ var Herbalist = function Herbalist(propiedades){
   }
   this.foragin = parseInt(this.foragin);
   this.dice = parseInt(this.dice);
+  this.difficulty = parseInt(this.difficulty);
   this.unitary = this.getPrimary(this.dice);
   console.log(this.unitary);
   this.totalDice = this.foragin + this.dice;
-
+  this.validProperties = ["Name", "Area", "Zone", "Level", "Cost", "Type", "Description"];
+  console.log('Difficulty: '+this.difficulty);
 };
 
-var herbalistHelper = function(area, zone, foragin, dice, unitary){
+var herbalistHelper = function(area, zone, foragin, dice, difficulty){
   //We change the properties so we can call them later:
-  var propiedades = {zone:zone, area:area, foragin:foragin, dice:dice, unitary:unitary};
+  var propiedades = {zone:zone, area:area, foragin:foragin, dice:dice, difficulty:difficulty};
   //And we initialize an new Herbalist Object with this properties. 
   var herbalistPouch = new Herbalist(propiedades);
 
@@ -24,7 +26,7 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   
   //Search the Area first
   var herbsInTheArea = herbalistPouch.searchTheArea(herbalistPouch.area);
-  
+
   //Search the zone
   var herbsInTheZone = herbalistPouch.searchTheZone(herbalistPouch.zone, herbsInTheArea);
 
@@ -32,12 +34,16 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   var maxLevelHerbs = herbalistPouch.whatYouCanFind(herbalistPouch.totalDice);
 
   //Now we check for the unitary
-  var herbQuantityByLevel = herbalistPouch.unitaryMix(herbalistPouch.unitary, maxLevelHerbs);
+  var herbQuantityByLevel = herbalistPouch.unitaryMix(herbalistPouch.unitary, maxLevelHerbs, this.difficulty);
 
   //Now we show the user the available herbs of the Area/Zone filtered by his unitary luck
+  var finalHerbsArray = herbalistPouch.finalSearchToArray(herbsInTheZone, maxLevelHerbs);
+  console.dir(finalHerbsArray);
+  
+  herbalistPouch.iterateAndPrintAllHerbs(finalHerbsArray, herbQuantityByLevel);
   /*
     Here we need to:
-    1) Show herbs filtered by Dificulty, with a quantity and price indicators (¿hiden?)
+    1) Show herbs filtered by Difficulty, with a quantity and price indicators (¿hiden?)
     2) Let the user "buy" this herbs with his ACTUAL unitary as money.
     3) Let the user throw again the dice, to get a new Unitary, and keep buying the Zone Filtered herbs until he get all or stops searching.
   */
@@ -56,14 +62,19 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   Herbalist.prototype.searchTheArea = function(area){
     var areaProp = 'Area';
     var filteredHerbs = [];
-    for (item in [allHerbs]) {
+    for (item in allHerbs) {
       if (allHerbs[item][areaProp] == area) {
           if(filteredHerbs.indexOf(allHerbs[item])){
             filteredHerbs.push(allHerbs[item]);
           }
         }
     }
-    return filteredHerbs;
+
+    if (filteredHerbs.length < 1) {
+      this.errorHandler("I am very sorry to tell you that this Area has no herbs.");
+    }else{
+      return filteredHerbs;
+    }
   };
 
 
@@ -78,13 +89,17 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
           }
         }
     }
-    return filteredHerbs2;
+    if (filteredHerbs2.length < 1) {
+      this.errorHandler("There are no herbs in the zone, sorry.");
+    }else{
+      return filteredHerbs2;
+    }
   };
   
 
 
   //Function that checks what difficulty you can have
-  Herbalist.prototype.whatYouCanFind = function(totalDice, zoneHerbs) {
+  Herbalist.prototype.whatYouCanFind = function(totalDice) {
     var maxLevel;
     switch(true) {
       case (totalDice > 201):
@@ -132,41 +147,53 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
 
 
   //Function that takes the unitary number and I don't know
-  Herbalist.prototype.unitaryMix = function(unitary, maxLevelHerbs){
+  Herbalist.prototype.unitaryMix = function(unitary, maxLevelHerbs, difficulty){
     var totalNumberOfHerbsByLevel = {};
-      if(maxLevelHerbs > 0){
-        totalNumberOfHerbsByLevel['routine'] = unitary - 1;
-      }
-      if(maxLevelHerbs > 1){
-        totalNumberOfHerbsByLevel['veasy'] = unitary - 2;
-      }
-      if(maxLevelHerbs > 2){
-        totalNumberOfHerbsByLevel['easy'] = unitary - 4;
-      }
-      if(maxLevelHerbs > 3){
-        totalNumberOfHerbsByLevel['normal'] = unitary - 6;
-      }
-      if(maxLevelHerbs > 4){
-        totalNumberOfHerbsByLevel['hard'] = unitary - 8;
-      }
-      if(maxLevelHerbs > 5){
-        totalNumberOfHerbsByLevel['vhard'] = unitary - 10;
-      }
-      if(maxLevelHerbs > 6){
-        totalNumberOfHerbsByLevel['ehard'] = unitary - 12;
-      }
-      if(maxLevelHerbs > 7){
-        totalNumberOfHerbsByLevel['sheerf'] = unitary - 13;
-      }
-      if(maxLevelHerbs == 9){
-        totalNumberOfHerbsByLevel['absurd'] = unitary - 14;
-      }
+    var thisTimeDif = Math.floor(Math.random() * this.difficulty)
+    if(maxLevelHerbs > 0){
+      var temp = ( unitary - 1 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['routine'] = (temp > 0) ? temp : 0;
+    }
+    if(maxLevelHerbs > 1){
+      temp = ( unitary - 2 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['veasy'] = (temp > 0) ? temp : 0;
+    }
+    if(maxLevelHerbs > 2){
+      temp = ( unitary - 4 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['easy'] = (temp > 0) ? temp : 0;
+    }
+    if(maxLevelHerbs > 3){
+      temp = ( unitary - 6 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['normal'] = (temp > 0) ? temp : 0;
+    }
+    if(maxLevelHerbs > 4){
+      temp =  ( unitary - 8 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['hard'] = (temp > 0) ? temp : 0;
+    }
+    if(maxLevelHerbs > 5){
+      temp =  ( unitary - 10 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['vhard'] = (temp > 0) ? temp : 0;
+    }
+    if(maxLevelHerbs > 6){
+      temp =  ( unitary - 12 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['ehard'] = (temp > 0) ? temp : 0;
+    }
+    if(maxLevelHerbs > 7){
+      temp =  ( unitary - 13 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['sheerf'] = (temp > 0) ? temp : 0;
+    }
+    if(maxLevelHerbs == 9){
+      temp =  ( unitary - 14 ) - thisTimeDif;
+      totalNumberOfHerbsByLevel['absurd'] = (temp > 0) ? temp : 0;
+    }
     console.dir(totalNumberOfHerbsByLevel);
+    return totalNumberOfHerbsByLevel;
+    
   };
 
 
 
-  //function that iterates and prints every SINGLE item
+  //function that iterates and prints every SINGLE item (to use in absoluteSearch();)
   Herbalist.prototype.iterateToPrintItem = function(item, index){
     $('#search-results').append('<ul class="item" id="item-'+index+'"></ul>');
     for (prop in item) {
@@ -176,17 +203,32 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
     }
   };
 
+  //Function that iterates and prints ALREADY FILTERED herbs
+  Herbalist.prototype.iterateAndPrintAllHerbs = function(herbs, herbQuantityByLevel){
+    for(item in herbs){
+      $('#search-results').append('<ul class="item" id="item-'+item+'"></ul>');
+      for (prop in herbs[item]) {
+        if (herbs[item].hasOwnProperty(prop)) {
+          $('#item-'+item).append('<li><strong class="prop">'+prop+'</strong><span class="val">'+herbs[item][prop]+'</span></li>');
+        }
+      }
+    }
+    $('#search-results').append('<div class="quantity" id="quantity"><h3>Quantity:</h3></div>')
+    for(item in herbQuantityByLevel){
+      $('#quantity').append('<p class="level"><span class="level-label">'+item+' </span><span class="level-value"> '+herbQuantityByLevel[item]+'</span></p>')
+    }
+  };
 
 
   //Version anterior
-  Herbalist.prototype.absoluteSearch = function(property, value){
+  Herbalist.prototype.absoluteSearch = function(property, value, herbs){
     this.resetSearch();
-    if(indexOf.call(validProperties, property) > -1 ){
-      for (item in allHerbs) {
-        if(allHerbs[item].hasOwnProperty(property)){
-          if (allHerbs[item][property] == value) {
-            console.dir(allHerbs[item]);
-            iterateToPrintItem(allHerbs[item], item);
+    if(this.indexOf.call(this.validProperties, property) > -1 ){
+      for (item in herbs) {
+        if(herbs[item].hasOwnProperty(property)){
+          if (herbs[item][property] == value) {
+            console.dir(herbs[item]);
+            this.iterateToPrintItem(herbs[item], item);
           }
         }
       }
@@ -216,43 +258,62 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
 
 
   Herbalist.prototype.finalSearchToArray = function(herbsInTheZone, maxlevelHerbs) {
-
-    return yourHerbs;
+    var areaProp = 'Level';
+    var yourHerbs = [];
+    for (item in herbsInTheZone)  {
+      if (herbsInTheZone[item][areaProp] < maxlevelHerbs) {
+          if(yourHerbs.indexOf(herbsInTheZone[item])){
+            yourHerbs.push(herbsInTheZone[item]);
+          }
+        }
+    }
+    if (yourHerbs.length < 1) {
+      this.errorHandler("Your level was to low to find Herbs");
+    }else{
+      return yourHerbs;
+    }
   }
 
 
   //Searching for the right way to do the primary number
   Herbalist.prototype.getPrimary = function(number) {
     var strigified = number.toString();
-    console.log(strigified);
     var primary = 0;
-    if (strigified.length > 2) {
-        console.log('The number has more than 2 digits');
-        primary += (parseInt(strigified.charAt(0), 10) * 10);
-        primary += parseInt(strigified.charAt(1), 10)
-        if(strigified.charAt(-1) == 0){
-          console.log('...and -1 is 0:');
-          primary += 10;
-        }else{
-          console.log('...and -1 is not 0');
-          primary += parseInt(strigified.charAt(0), 10);
-      }
-    }else if(strigified.length > 1){
+    if(strigified.length > 1){
       if(strigified.charAt(-1) == 0){
-        console.log('The number has more than 1 digit, and -1 is 0:');
+        // console.log('The number has more than 1 digit, and -1 is 0:');
         primary += 10;
         primary += parseInt(strigified.charAt(0), 10);
       }else{
-        console.log('The number has more than 1 digit, and -1 is not 0');
+        // console.log('The number has more than 1 digit, and -1 is not 0');
         primary += parseInt(strigified.charAt(0), 10);
         primary += parseInt(strigified.charAt(1), 10);
       }
     }else{
-      console.log('The number has 1 digit');
+      // console.log('The number has 1 digit');
       primary += parseInt(strigified.charAt(0), 10);
     }
     return primary;
   }
+
+
+  //Simply prints in the screen what we want when the user does not find herbs. 
+  Herbalist.prototype.errorHandler = function(message) {
+    $('#search-results').append('<ul class="error" id="error"></ul>');
+    $('#error').append('<li>'+message+'</li>');
+  }
+
+  //Sets the difficulty of the 
+  Herbalist.prototype.setDifficulty = function(difficultyLevel) {
+    this.difficulty = difficultyLevel;
+  }
+
+
+
+
+
+
+
 
 
 

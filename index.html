@@ -54,13 +54,13 @@
               <option value="Rain Forest">Rain Forest</option>
             </select>
             <label for="foragin-skill">Foragin Skill</label>
-            <input id="foragin-skill" type="number" name="foragin-skill" placeholder="Foragin Skill">
+            <input id="foragin-skill" type="number" name="foragin-skill" placeholder="Foragin/Herbalism Skill">
             <label for="dice-result">Dice Result</label>
-            <input id="dice-result" type="number" name="dice-result" placeholder="Dice Result">
-            <label for="unitary-result">Unitary Result</label>
-            <input id="unitary-result" type="number" name="unitary-result" placeholder="Unitary Result">
+            <input id="dice-result" type="number" name="dice-result" placeholder="Dice Result (0-100)">
+            <label for="difficulty">Difficulty</label>
+            <input id="difficulty" type="number" name="difficulty" placeholder="Difficulty (0-100)">
           </form>
-          <button type="submit" val="Buscar" onclick="herbalistHelper((getElementById('area').value), (getElementById('zone').value), (getElementById('foragin-skill').value),(getElementById('dice-result').value), (getElementById('unitary-result').value));">Search</button>
+          <button type="submit" val="Buscar" onclick="herbalistHelper((getElementById('area').value), (getElementById('zone').value), (getElementById('foragin-skill').value),(getElementById('dice-result').value), (getElementById('difficulty').value));">Search</button>
          
           <!-- Search Results will display in here: -->
           <div class="search-results" id="search-results"></div>
