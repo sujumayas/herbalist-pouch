@@ -1,9 +1,3 @@
-
-
-
-
-
-
 //Objeto Principal = App function. It sets the primary variables and wrapps the rest of the functions.
 var Herbalist = function Herbalist(propiedades){
   for (var propiedad in propiedades) {
@@ -188,11 +182,11 @@ var herbalistHelper = function(area, zone, foragin, dice, unitary){
   Herbalist.prototype.absoluteSearch = function(property, value){
     this.resetSearch();
     if(indexOf.call(validProperties, property) > -1 ){
-      for (item in herbs) {
-        if(herbs[item].hasOwnProperty(property)){
-          if (herbs[item][property] == value) {
-            console.dir(herbs[item]);
-            iterateToPrintItem(herbs[item], item);
+      for (item in allHerbs) {
+        if(allHerbs[item].hasOwnProperty(property)){
+          if (allHerbs[item][property] == value) {
+            console.dir(allHerbs[item]);
+            iterateToPrintItem(allHerbs[item], item);
           }
         }
       }
