@@ -8,7 +8,6 @@ var Herbalist = function Herbalist(propiedades){
   this.dice = parseInt(this.dice);
   this.difficulty = parseInt(this.difficulty);
   this.unitary = this.getPrimary(this.dice);
-  console.log(this.unitary);
   this.totalDice = this.foragin + this.dice;
   this.validProperties = ["Name", "Area", "Zone", "Level", "Cost", "Type", "Description"];
   console.log('Difficulty: '+this.difficulty);
@@ -109,37 +108,38 @@ var herbalistHelper = function(area, zone, foragin, dice, difficulty){
       case (totalDice > 181):
         console.log('Max level: Sheer Folly');
         maxLevel = 8;
-      break;
-        case (totalDice > 161):
+        break;
+      case (totalDice > 161):
         console.log('Max level: Extremly Hard');
         maxLevel = 7;
-      break;
-        case (totalDice > 141):
+        break;
+      case (totalDice > 141):
         console.log('Max level: Very Hard');
         maxLevel = 6;
-      break;
-        case (totalDice > 121):
+        break;
+      case (totalDice > 121):
         console.log('Max level: Hard');
         maxLevel = 5;
-      break;
-        case (totalDice > 101):
+        break;
+      case (totalDice > 101):
         console.log('Max level: Normal');
         maxLevel = 4;
         break;
-      break;
-        case (totalDice > 81):
+      case (totalDice > 81):
         console.log('Max level: Easy');
         maxLevel = 3;
         break;
-      break;
-        case (totalDice > 61):
+      case (totalDice > 61):
         console.log('Max level: Very Easy');
         maxLevel = 2;
         break;
-      break;
-        case (totalDice > 41):
+      case (totalDice > 41):
         console.log('Max level: Routine');
         maxLevel = 1;
+        break;
+      case (totalDice < 41):
+        errorHandler("Your level is so low that you have no options to find something anywhere.");
+        maxLevel = 0;
         break;
     }
     return maxLevel;
@@ -230,10 +230,12 @@ var herbalistHelper = function(area, zone, foragin, dice, difficulty){
             console.dir(herbs[item]);
             this.iterateToPrintItem(herbs[item], item);
           }
+        }else{
+          this.errorHandler('No existe ninguna hierba con esa propiedad');
         }
       }
     }else{
-      console.log('No puedes buscar esa propiedad, porque no existe.');
+      this.errorHandler('No puedes buscar esta propiedad, porque no existe');
     }
   };
 
